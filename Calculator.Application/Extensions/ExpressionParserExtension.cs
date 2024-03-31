@@ -91,10 +91,10 @@ namespace Calculator.Core.Extensions
             }
             else if (token.Type == TokenType.Function)
             {
-                FunctionNode func = null;
-                // implementation for function
+                var argument1 = ParseFactor();
+                var argument2 = ParseFactor();
 
-                return func;
+                return new FunctionNode(token.Value.ToString(), argument1, argument2);
             }
             else if (token.Type == TokenType.LeftParenthesis)
             {

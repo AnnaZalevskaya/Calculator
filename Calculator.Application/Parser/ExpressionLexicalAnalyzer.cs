@@ -1,15 +1,18 @@
 ﻿using Calculator.Core.Consts;
+using Calculator.Infrastructure.Data;
 using System.Collections.Generic;
 
 namespace Calculator.Core
 {
     public class ExpressionLexicalAnalyzer
     {
+        private readonly ExpressionContext _context;
         private readonly string _expression;
         private int position;
 
-        public ExpressionLexicalAnalyzer(string expression)
+        public ExpressionLexicalAnalyzer(ExpressionContext context, string expression)
         {
+            _context = context;
             _expression = expression;
             position = 0;
         }
@@ -78,16 +81,28 @@ namespace Calculator.Core
 
         private string ReadId()
         {
-            // reading the function name
+            var startPosition = position;
 
-            return "";
+            while (position < _expression.Length && char.IsLetterOrDigit(_expression[position]))
+            {
+                position++;
+            }
+
+            return _expression.Substring(startPosition, position - startPosition);
         }
 
         private bool IsFunction(string id)
         {
-            // checking for a function
+            var function = _context.GetFunction(id);
 
-            return false;
+            if (function != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private bool IsOperator(char c)

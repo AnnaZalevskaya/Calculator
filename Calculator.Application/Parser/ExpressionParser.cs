@@ -1,11 +1,19 @@
 ﻿using System;
 using Calculator.Core.Nodes;
 using Calculator.Core.Consts;
+using Calculator.Infrastructure.Data;
 
 namespace Calculator.Core.Extensions
 {
     public class ExpressionParser
     {
+        private readonly ExpressionContext _context;
+
+        public ExpressionParser(ExpressionContext context)
+        {
+            _context = context;
+        }
+
         public double ParseAndEvaluate(string expression)
         {
             double result;
@@ -31,9 +39,7 @@ namespace Calculator.Core.Extensions
             }
             else if (expression is VariableNode variableNode)
             {
-                // implementation for variables
-
-                return 0;
+                return _context.GetVariable(variableNode.Name);
             }
             else if (expression is BinaryOperatorNode binaryOperatorNode)
             {
@@ -63,9 +69,11 @@ namespace Calculator.Core.Extensions
             }
             else if (expression is FunctionNode functionNode)
             {
-                // implementation for functions
+                var function = _context.GetFunction(functionNode.Name);
+                var argumentValue1 = EvaluateExpression(functionNode.Argument1);
+                var argumentValue2 = EvaluateExpression(functionNode.Argument2);
 
-                return 0;
+                return function(argumentValue1, argumentValue2);
             }
             else
             {
@@ -74,8 +82,8 @@ namespace Calculator.Core.Extensions
         }
 
         private ExpressionNode ParseExpression(string expression)
-        {
-            var lexer = new ExpressionLexicalAnalyzer(expression);
+        {    
+            var lexer = new ExpressionLexicalAnalyzer(_context, expression);
             var tokens = lexer.Tokenize();
             var parser = new ExpressionParserExtension(tokens);
 
