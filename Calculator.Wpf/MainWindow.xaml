@@ -9,13 +9,13 @@
     <Grid x:Name="Calculator">
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
             <RowDefinition Height="6*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition ></ColumnDefinition>
-            <ColumnDefinition Width="8*"></ColumnDefinition>
+            <ColumnDefinition Width="6*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="1" Name="ExpressionTextBox"/>
-        <Button x:Name="Clear" Content="C" Click="Clear_Click"/>
+        <TextBlock Grid.Row="1" Name="ExpressionTextBox" FontSize="24" Grid.ColumnSpan="4" TextAlignment="Right" Background="LightGray"/>
     </Grid>
 </Window>
