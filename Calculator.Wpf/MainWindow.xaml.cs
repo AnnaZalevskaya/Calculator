@@ -9,12 +9,12 @@ namespace Calculator.Wpf
 
     public partial class MainWindow : Window
     {
-        string textBoxVal = string.Empty;
-        char[] mainButtonValues = new[] { '1', '2', '3', '+', '4', '5', '6', '-', '7', '8', '9', '*', '0', '.', 'C', '/' };
-        string[] additionalButtonValues = new[] { "<-", "=", "(", ")", "->" };
-        string[] variablesName = new[] { "X", "Y", "Z", "I", "J", "K", "Save" };
-        string[] toolbarValues = new[] { "Variables", "Functions" };
-        ListBox VariablesListBox = new ListBox();
+        private string textBoxVal = string.Empty;
+        private readonly char[] mainButtonValues = new[] { '1', '2', '3', '+', '4', '5', '6', '-', '7', '8', '9', '*', '0', '.', 'C', '/' };
+        private readonly string[] additionalButtonValues = new[] { "<-", "=", "(", ")", "->" };
+        private readonly string[] variablesName = new[] { "x", "y", "z", "i", "j", "k", "f",",","Save" };
+        //private readonly string[] toolbarValues = new[] { "Variables", "Functions" };
+        private ListBox VariablesListBox = new ListBox();
 
         Dictionary<string, string> variablesDictionary = new Dictionary<string, string>();
 
@@ -35,7 +35,7 @@ namespace Calculator.Wpf
 
             Calculator.Children.Add(numberPanel);
             Calculator.Children.Add(additionalPanel);
-            Calculator.Children.Add(InitializeToolbar());
+            //Calculator.Children.Add(InitializeToolbar());
         }
 
         private void InputButton_Click(object sender, RoutedEventArgs e)
@@ -173,23 +173,23 @@ namespace Calculator.Wpf
             }
             return gridPanel;
         }
-        private ToolBar InitializeToolbar()
-        {
-            ToolBar menu = new ToolBar();
-            foreach (var item in toolbarValues)
-            {
-                RadioButton checkBox = new RadioButton();
-                checkBox.Checked += RadioButton_Checked;
-                checkBox.Content = item;
-                menu.Items.Add(checkBox);
-                SetGridSpan(menu, 1, 4);
-            }
-            return menu;
-        }
+        //private ToolBar InitializeToolbar()
+        //{
+        //    ToolBar menu = new ToolBar();
+        //    foreach (var item in toolbarValues)
+        //    {
+        //        RadioButton checkBox = new RadioButton();
+        //        checkBox.Checked += RadioButton_Checked;
+        //        checkBox.Content = item;
+        //        menu.Items.Add(checkBox);
+        //        SetGridSpan(menu, 1, 4);
+        //    }
+        //    return menu;
+        //}
 
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-        }
+        //private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        //{
+        //}
 
 
     }
