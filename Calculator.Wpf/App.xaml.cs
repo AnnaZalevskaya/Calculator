@@ -1,17 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
+using Calculator.Application.Services.Implementations;
+using Calculator.Application.Services.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Calculator.Wpf
 {
     /// <summary>
     /// Логика взаимодействия для App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
+        public static IServiceProvider _serviceProvider { get; private set; }
+
+        private void ConfigureServices()
+        {
+            IServiceCollection services = new ServiceCollection();
+
+            services.AddScoped<IVariableService, VariableService>();
+            
+
+            _serviceProvider = services.BuildServiceProvider();
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            ConfigureServices();
+        }
     }
 }
