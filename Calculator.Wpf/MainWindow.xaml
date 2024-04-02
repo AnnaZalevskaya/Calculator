@@ -5,17 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calculator.Wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="500" Width="800">
+
     <Grid x:Name="Calculator">
         <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
             <RowDefinition Height="3*"></RowDefinition>
             <RowDefinition Height="6*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="6*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="1" Name="ExpressionTextBox" FontSize="24" Grid.ColumnSpan="4" TextAlignment="Right" Background="LightGray"/>
     </Grid>
+    
 </Window>
