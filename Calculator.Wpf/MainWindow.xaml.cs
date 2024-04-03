@@ -19,10 +19,10 @@ namespace Calculator.Wpf
         Grid radioButtonsGrid;
         TextBlock ExpressionTextBlock;
         private string textBoxVal = string.Empty;
-        private readonly char[] mainButtonValues = new[] { '1', '2', '3', '+', '4', '5', '6', '-', '7', '8', '9', '*', '0', '.', 'C', '/' };
-        private readonly string[] additionalButtonValues = new[] { "<-", "=", "(", ")", "->" };
-        private readonly string[] variablesName = new[] { "x", "y", "z", "i", "j", "k", "f",",","Save" };
-        private readonly string[] radioButtonValues = new[] { "Variables", "Functions" };
+        private readonly char[] _mainButtonValues = new[] { '1', '2', '3', '+', '4', '5', '6', '-', '7', '8', '9', '*', '0', '.', 'C', '/' };
+        private readonly string[] _additionalButtonValues = new[] { "<-", "=", "(", ")", "Res" };
+        private readonly string[] _variablesName = new[] { "x", "y", "z", "i", "j", "k", "f",",","Save" };
+        private readonly string[] _radioButtonValues = new[] { "Variables", "Functions" };
 
         //public readonly Dictionary<string, string> variablesDictionary = new Dictionary<string, string>();
 
@@ -36,11 +36,11 @@ namespace Calculator.Wpf
             radioButtonsGrid = InitializeGridPanel(2, 1);
             ExpressionTextBlock = InitializeExpressionTextBlock();
 
-            AddRadioButtons(radioButtonsGrid, radioButtonValues);
+            AddRadioButtons(radioButtonsGrid, _radioButtonValues);
 
-            AddButtons(numberPanel, mainButtonValues);
-            AddButtons(additionalPanel, additionalButtonValues);
-            AddButtons(lettersPanel, variablesName);
+            AddButtons(numberPanel, _mainButtonValues);
+            AddButtons(additionalPanel, _additionalButtonValues);
+            AddButtons(lettersPanel, _variablesName);
 
             SetGridPosition(numberPanel, 2, 0);
             SetGridPosition(additionalPanel, 1, 0);
@@ -71,19 +71,18 @@ namespace Calculator.Wpf
                         ExpressionTextBlock.Text = textBoxVal;
                     }
                     break;
-                case "->":
-                    
+                case "Res":
+                    //implement sending expression
                     break;
                 case "Save":
                     var checkedRadioButton = radioButtonsGrid.Children.OfType<RadioButton>().FirstOrDefault(n => n.IsChecked==true);
-                    if(checkedRadioButton.Content.ToString() == radioButtonValues[0])//variable
+                    if(checkedRadioButton.Content.ToString() == _radioButtonValues[0])//variable
                     {
-                        MessageBox.Show("Var");
-
+                        //Implement saving variable
                     }
-                    if (checkedRadioButton.Content.ToString() == radioButtonValues[1])//func
+                    if (checkedRadioButton.Content.ToString() == _radioButtonValues[1])//func
                     {
-                        MessageBox.Show("Func");
+                        //Implement saving func
                     }
                     break;
                 default:
