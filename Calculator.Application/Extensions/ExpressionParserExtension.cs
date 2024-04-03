@@ -8,12 +8,12 @@ namespace Calculator.Core.Extensions
     public class ExpressionParserExtension
     {
         private readonly List<Token> _tokens;
-        private int position;
+        private int _position;
 
         public ExpressionParserExtension(List<Token> tokens)
         {
             _tokens = tokens;
-            position = 0;
+            _position = 0;
         }
 
         public ExpressionNode Parse()
@@ -25,9 +25,9 @@ namespace Calculator.Core.Extensions
         {
             var left = ParseTerm();
 
-            while (position < _tokens.Count)
+            while (_position < _tokens.Count)
             {
-                var token = _tokens[position];
+                var token = _tokens[_position];
 
                 if (token.Type != TokenType.Operator || (token.Value != OperatorConsts.Plus.ToString()
                     && token.Value != OperatorConsts.Minus.ToString()))
@@ -35,7 +35,7 @@ namespace Calculator.Core.Extensions
                     break;
                 }
 
-                position++;
+                _position++;
 
                 var right = ParseTerm();
 
@@ -49,9 +49,10 @@ namespace Calculator.Core.Extensions
         {
             var left = ParseFactor();
 
-            while (position < _tokens.Count)
+            while (_position < _tokens.Count)
             {
-                var character = _tokens[position];
+                var character = _tokens[_position];
+
                 if (character.Type != TokenType.Operator || 
                     (character.Value != OperatorConsts.Multiplication.ToString() 
                     && character.Value != OperatorConsts.Division.ToString()))
@@ -59,7 +60,7 @@ namespace Calculator.Core.Extensions
                     break;
                 }
 
-                position++;
+                _position++;
 
                 var right = ParseFactor();
 
@@ -71,41 +72,37 @@ namespace Calculator.Core.Extensions
 
         private ExpressionNode ParseFactor()
         {
-            var token = _tokens[position];
-            position++;
+            var token = _tokens[_position];
+            _position++;
 
-            if (token.Type == TokenType.Number)
+            switch(token.Type)
             {
-                if (double.TryParse(token.Value.ToString(), out double value))
-                {
-                    return new NumberNode(value);
-                }              
-                else
-                {
-                    throw new Exception($"Invalid number: {token.Value}");
-                }
-            }
-            else if (token.Type == TokenType.Variable)
-            {
-                return new VariableNode(token.Value.ToString());
-            }
-            else if (token.Type == TokenType.Function)
-            {
-                var argument1 = ParseFactor();
-                var argument2 = ParseFactor();
+                case TokenType.Number:
+                    if (double.TryParse(token.Value.ToString(), out double value))
+                    {
+                        return new NumberNode(value);
+                    }
+                    else
+                    {
+                        throw new Exception($"Invalid number: {token.Value}");
+                    }
+                case TokenType.Variable:
+                    return new VariableNode(token.Value.ToString());
+                case TokenType.Function:
+                    var argument1 = ParseFactor();
+                    var argument2 = ParseFactor();
 
-                return new FunctionNode(token.Value.ToString(), argument1, argument2);
-            }
-            else if (token.Type == TokenType.LeftParenthesis)
-            {
-                var expression = ParseExpression();
+                    return new FunctionNode(token.Value.ToString(), argument1, argument2);
+                case TokenType.LeftParenthesis:
+                    var expression = ParseExpression();
 
-                if (position < _tokens.Count && _tokens[position].Type == TokenType.RightParenthesis)
-                {
-                    position++;
+                    if (_position < _tokens.Count && _tokens[_position].Type == TokenType.RightParenthesis)
+                    {
+                        _position++;
 
-                    return expression;
-                }
+                        return expression;
+                    }
+                    break;
             }
 
             return null;

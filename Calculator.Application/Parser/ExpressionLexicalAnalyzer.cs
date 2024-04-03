@@ -8,22 +8,22 @@ namespace Calculator.Core
     {
         private readonly ExpressionContext _context;
         private readonly string _expression;
-        private int position;
+        private int _position;
 
         public ExpressionLexicalAnalyzer(ExpressionContext context, string expression)
         {
             _context = context;
             _expression = expression;
-            position = 0;
+            _position = 0;
         }
 
         public List<Token> Tokenize()
         {
             var tokens = new List<Token>();
 
-            while (position < _expression.Length)
+            while (_position < _expression.Length)
             {
-                var currentChar = _expression[position];
+                var currentChar = _expression[_position];
 
                 if (char.IsDigit(currentChar) || currentChar == OperatorConsts.Point)
                 {
@@ -45,21 +45,21 @@ namespace Calculator.Core
                 else if (IsOperator(currentChar))
                 {
                     tokens.Add(new Token(TokenType.Operator, currentChar.ToString()));
-                    position++;
+                    _position++;
                 }
                 else if (currentChar == OperatorConsts.OpeningParenthesis)
                 {
                     tokens.Add(new Token(TokenType.LeftParenthesis, OperatorConsts.OpeningParenthesis.ToString()));
-                    position++;
+                    _position++;
                 }
                 else if (currentChar == OperatorConsts.ClosingParenthesis)
                 {
                     tokens.Add(new Token(TokenType.RightParenthesis, OperatorConsts.ClosingParenthesis.ToString()));
-                    position++;
+                    _position++;
                 }
                 else
                 {
-                    position++; 
+                    _position++; 
                 }
             }
 
@@ -68,27 +68,27 @@ namespace Calculator.Core
 
         private string ReadNumber()
         {
-            var startPosition = position;
+            var startPosition = _position;
 
-            while (position < _expression.Length && (char.IsDigit(_expression[position]) 
-                || _expression[position] == OperatorConsts.Point))
+            while (_position < _expression.Length && (char.IsDigit(_expression[_position]) 
+                || _expression[_position] == OperatorConsts.Point))
             {
-                position++;
+                _position++;
             }
 
-            return _expression.Substring(startPosition, position - startPosition);
+            return _expression.Substring(startPosition, _position - startPosition);
         }
 
         private string ReadId()
         {
-            var startPosition = position;
+            var startPosition = _position;
 
-            while (position < _expression.Length && char.IsLetterOrDigit(_expression[position]))
+            while (_position < _expression.Length && char.IsLetterOrDigit(_expression[_position]))
             {
-                position++;
+                _position++;
             }
 
-            return _expression.Substring(startPosition, position - startPosition);
+            return _expression.Substring(startPosition, _position - startPosition);
         }
 
         private bool IsFunction(string id)
