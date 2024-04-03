@@ -13,46 +13,44 @@ namespace Calculator.Wpf
 
     public partial class MainWindow : Window
     {
-        Grid numberPanel;
-        Grid additionalPanel;
-        Grid lettersPanel;
-        Grid radioButtonsGrid;
-        TextBlock ExpressionTextBlock;
-        private string textBoxVal = string.Empty;
+        private Grid _numberPanel;
+        private Grid _additionalPanel;
+        private Grid _lettersPanel;
+        private Grid _radioButtonsGrid;
+        private TextBlock _ExpressionTextBlock;
         private readonly char[] _mainButtonValues = new[] { '1', '2', '3', '+', '4', '5', '6', '-', '7', '8', '9', '*', '0', '.', 'C', '/' };
         private readonly string[] _additionalButtonValues = new[] { "<-", "=", "(", ")", "Res" };
         private readonly string[] _variablesName = new[] { "x", "y", "z", "i", "j", "k", "f",",","Save" };
         private readonly string[] _radioButtonValues = new[] { "Variables", "Functions" };
 
-        //public readonly Dictionary<string, string> variablesDictionary = new Dictionary<string, string>();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            numberPanel = InitializeGridPanel(4, 4);
-            additionalPanel = InitializeGridPanel(1, 5);
-            lettersPanel = InitializeGridPanel(3, 3);
-            radioButtonsGrid = InitializeGridPanel(2, 1);
-            ExpressionTextBlock = InitializeExpressionTextBlock();
+            _numberPanel = InitializeGridPanel(4, 4);
+            _additionalPanel = InitializeGridPanel(1, 5);
+            _lettersPanel = InitializeGridPanel(3, 3);
+            _radioButtonsGrid = InitializeGridPanel(2, 1);
+            _ExpressionTextBlock = InitializeExpressionTextBlock();
 
-            AddRadioButtons(radioButtonsGrid, _radioButtonValues);
+            AddRadioButtons(_radioButtonsGrid, _radioButtonValues);
 
-            AddButtons(numberPanel, _mainButtonValues);
-            AddButtons(additionalPanel, _additionalButtonValues);
-            AddButtons(lettersPanel, _variablesName);
+            AddButtons(_numberPanel, _mainButtonValues);
+            AddButtons(_additionalPanel, _additionalButtonValues);
+            AddButtons(_lettersPanel, _variablesName);
 
-            SetGridPosition(numberPanel, 2, 0);
-            SetGridPosition(additionalPanel, 1, 0);
-            SetGridPosition(lettersPanel, 2, 1);
-            SetGridPosition(radioButtonsGrid, 1, 1);
-            SetGridSpan(ExpressionTextBlock, 1, 2);
+            SetGridPosition(_numberPanel, 2, 0);
+            SetGridPosition(_additionalPanel, 1, 0);
+            SetGridPosition(_lettersPanel, 2, 1);
+            SetGridPosition(_radioButtonsGrid, 1, 1);
+            SetGridSpan(_ExpressionTextBlock, 1, 2);
 
-            Calculator.Children.Add(lettersPanel);
-            Calculator.Children.Add(numberPanel);
-            Calculator.Children.Add(additionalPanel);
-            Calculator.Children.Add(radioButtonsGrid);
-            Calculator.Children.Add(ExpressionTextBlock);
+            Calculator.Children.Add(_lettersPanel);
+            Calculator.Children.Add(_numberPanel);
+            Calculator.Children.Add(_additionalPanel);
+            Calculator.Children.Add(_radioButtonsGrid);
+            Calculator.Children.Add(_ExpressionTextBlock);
 
         }
 
@@ -61,21 +59,20 @@ namespace Calculator.Wpf
             Button pressedButton = (Button)sender;
             switch (pressedButton.Content)
             {
-                case 'C':
+                case "C":
                     ClearExpression();
                     break;
                 case "<-":
-                    if (textBoxVal != String.Empty)
+                    if (_ExpressionTextBlock.Text != String.Empty)
                     {
-                        textBoxVal = textBoxVal.Remove(textBoxVal.Count() - 1);
-                        ExpressionTextBlock.Text = textBoxVal;
+                        _ExpressionTextBlock.Text = _ExpressionTextBlock.Text.Remove(_ExpressionTextBlock.Text.Count() - 1); ;
                     }
                     break;
                 case "Res":
                     //implement sending expression
                     break;
                 case "Save":
-                    var checkedRadioButton = radioButtonsGrid.Children.OfType<RadioButton>().FirstOrDefault(n => n.IsChecked==true);
+                    var checkedRadioButton = _radioButtonsGrid.Children.OfType<RadioButton>().FirstOrDefault(n => n.IsChecked==true);
                     if(checkedRadioButton.Content.ToString() == _radioButtonValues[0])//variable
                     {
                         //Implement saving variable
@@ -86,8 +83,7 @@ namespace Calculator.Wpf
                     }
                     break;
                 default:
-                    textBoxVal += pressedButton.Content;
-                    ExpressionTextBlock.Text = textBoxVal;
+                    _ExpressionTextBlock.Text += pressedButton.Content.ToString() ;
                     break;
             }
 
@@ -107,8 +103,7 @@ namespace Calculator.Wpf
         
         void ClearExpression()
         {
-            textBoxVal = string.Empty;
-            ExpressionTextBlock.Text = textBoxVal;
+            _ExpressionTextBlock.Text = String.Empty;
         }
         private void AddRadioButtons(Grid panel, string[] radioButtonValues)
         {
