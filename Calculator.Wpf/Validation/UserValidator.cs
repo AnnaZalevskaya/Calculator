@@ -5,6 +5,9 @@ namespace Calculator.Wpf.Validation
 {
     public class UserValidator
     {
+        private char[] _statementOperators = { '+', '-', '*', '/' };
+        private char[] _decimalSeparators = { '.', ',' };
+        private char[] _brackets = { '(', ')' };
         public string Validate(string expression)
         {
             if (string.IsNullOrWhiteSpace(expression))
@@ -50,11 +53,7 @@ namespace Calculator.Wpf.Validation
 
             return ProcessExpression(expression, (currentChar, nextChar) =>
             {
-                if (char.IsDigit(currentChar) && char.IsLetter(nextChar))
-                {
-                    return $"Invalid variable expression '{currentChar}{nextChar}' found";
-                }
-                else if (char.IsLetter(currentChar) && char.IsDigit(nextChar))
+                if ((char.IsDigit(currentChar) && char.IsLetter(nextChar))||(char.IsLetter(currentChar) && char.IsDigit(nextChar)))
                 {
                     return $"Invalid variable expression '{currentChar}{nextChar}' found";
                 }
@@ -67,11 +66,7 @@ namespace Calculator.Wpf.Validation
         {
             return ProcessExpression(expression, (currentChar, nextChar) =>
             {
-                if (char.IsLetter(currentChar) && (nextChar == '.' || nextChar == ',' || nextChar == '(' || nextChar == ')'))
-                {
-                    return $"Invalid variable expression '{currentChar}{nextChar}' found";
-                }
-                else if ((currentChar == '.' || currentChar == ',') && char.IsLetter(nextChar))
+                if ((char.IsLetter(currentChar) && (_decimalSeparators.Contains(nextChar) || _brackets.Contains(nextChar))) || ((_decimalSeparators.Contains(currentChar)) && char.IsLetter(nextChar)))
                 {
                     return $"Invalid variable expression '{currentChar}{nextChar}' found";
                 }
@@ -104,8 +99,8 @@ namespace Calculator.Wpf.Validation
         {
             return ProcessExpression(expression, (currentChar, nextChar) =>
             {
-                if ((currentChar == '+' || currentChar == '-' || currentChar == '*' || currentChar == '/' || currentChar == '(' || currentChar == ')')
-                   && (nextChar == '.' || nextChar == ','))
+                if ((_statementOperators.Contains(currentChar) || _brackets.Contains(currentChar))
+                   && (_decimalSeparators.Contains(nextChar)))
                 {
                     return $"Correct Sequence operators '{currentChar}' and '{nextChar}' found";
                 }
@@ -118,8 +113,8 @@ namespace Calculator.Wpf.Validation
         {
             return ProcessExpression(expression, (currentChar, nextChar) =>
             {
-                if ((currentChar == '+' || currentChar == '-' || currentChar == '*' || currentChar == '/' || currentChar == '.' || currentChar == ',')
-                    && (nextChar == '+' || nextChar == '-' || nextChar == '*' || nextChar == '/' || currentChar == '.' || currentChar == ','))
+                if ((_statementOperators.Contains(currentChar) || _decimalSeparators.Contains(currentChar))
+                    && (_statementOperators.Contains(nextChar) || _decimalSeparators.Contains(nextChar)))
                 {
                     return $"Consecutive operators '{currentChar}' and '{nextChar}' found";
                 }
@@ -131,7 +126,7 @@ namespace Calculator.Wpf.Validation
         private string CheckFirstCharacter(string expression)
         {
             char firstChar = expression[0];
-            if (firstChar == '*' || firstChar == '/' || firstChar == '.' || firstChar == ',')
+            if (firstChar == '*' || firstChar == '/' || _decimalSeparators.Contains(firstChar))
             {
                 return "Invalid first character in expression";
             }
@@ -143,7 +138,7 @@ namespace Calculator.Wpf.Validation
         {
             return ProcessExpression(expression, (currentChar, nextChar) =>
             {
-                if ((currentChar == '+' || currentChar == '-' || currentChar == '*' || currentChar == '/')
+                if ((_statementOperators.Contains(currentChar))
                        && (nextChar == ')'))
                 {
                     return $"Closing parenthesis ')' preceded by the operator '{nextChar}";
