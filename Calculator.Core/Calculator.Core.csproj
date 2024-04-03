@@ -41,10 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Consts\OperatorConsts.cs" />
+    <Compile Include="Nodes\BinaryOperatorNode.cs" />
+    <Compile Include="Nodes\Base\ExpressionNode.cs" />
+    <Compile Include="Nodes\FunctionNode.cs" />
+    <Compile Include="Nodes\NumberNode.cs" />
+    <Compile Include="Nodes\VariableNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Extensions\" />
+    <Compile Include="Models\Enums\TokenType.cs" />
+    <Compile Include="Models\Token.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
