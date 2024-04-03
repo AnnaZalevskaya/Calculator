@@ -7,62 +7,23 @@ namespace Calculator.Tests
 	{
 		private readonly ExpressionParser parser = CreateExpressionParser();
 
-		[Fact]
-		public void ParseAndEvaluate_ReturnsSameValuesIfArithmeticExpressionWithPositiveValuesIsPassed()
+		[Theory]
+		[InlineData("2 + 1 - 3", 0d)]
+		[InlineData("-2 + 1 - 3", -4d)]
+		[InlineData("1 + f", 4d)]
+		[InlineData("1 + x", 2d)]
+		[InlineData("f + x + y", 6d)]
+		public void ParseAndEvaluate_ReturnsRightValuesWhenDifferentTypesOfExpressionIsPassed(string expression, double expected)
 		{
-			var expression = "2 + 1 - 3";
-			var expected = 0d;
-
 			var actual = parser.ParseAndEvaluate(expression);
 			Assert.Equal(expected, actual);
 		}
 
-		[Fact]
-		public void ParseAndEvaluate_ReturnsSameValuesIfArithmeticExpressionWithNegativeValuesIsPassed()
+		[Theory]
+		[InlineData("1 +- 2 -- 3")]
+		[InlineData("1 + z")] 
+		public void ParseAndEvaluate_ReturnsNaNWhenDifferentTypesOfExpressionIsPassed(string expression)
 		{
-			var expression = "-2 + 1 - 3";
-			var expected = -4d;
-
-			var actual = parser.ParseAndEvaluate(expression);
-			Assert.Equal(expected, actual);
-		}
-
-		[Fact]
-		public void ParseAndEvaluate_ReturnsNaNIfArithmeticExpessionIsNotValid()
-		{
-			string expression = "1 +- 2 -- 3";
-			var actual = parser.ParseAndEvaluate(expression);
-			Assert.Equal(double.NaN, actual);
-		}
-
-		[Fact]
-		public void ParseAndEvaluate_ReturnsRightValueIfFunctionIsPassed()
-		{
-			string expression = "1 + f";
-			var actual = parser.ParseAndEvaluate(expression);
-			Assert.Equal(4d, actual);
-		}
-
-		[Fact]
-		public void ParseAndEvaluate_ReturnsRightValueIfVariableIsPassed()
-		{
-			string expression = "1 + x";
-			var actual = parser.ParseAndEvaluate(expression);
-			Assert.Equal(2d, actual);
-		}
-
-		[Fact]
-		public void ParseAndEvaluate_ReturnsRightValueIfVariableAndFunctionIsPassed()
-		{
-			string expression = "f + x + y";
-			var actual = parser.ParseAndEvaluate(expression);
-			Assert.Equal(6d, actual);
-		}
-
-		[Fact]
-		public void ParseAndEvaluate_ReturnsNaNIfVariableOrFunctionIsNotExist()
-		{
-			string expression = "1 + z";
 			var actual = parser.ParseAndEvaluate(expression);
 			Assert.Equal(double.NaN, actual);
 		}
