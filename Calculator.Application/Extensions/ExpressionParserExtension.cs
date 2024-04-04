@@ -103,6 +103,13 @@ namespace Calculator.Core.Extensions
                         return expression;
                     }
                     break;
+                case TokenType.Operator:
+                    if (token.Value == OperatorConsts.Minus.ToString())
+                    {
+                        var factor = ParseFactor();
+                        return new BinaryOperatorNode(OperatorConsts.Minus, new NumberNode(0), factor);
+                    }
+                    break;
             }
 
             return null;
