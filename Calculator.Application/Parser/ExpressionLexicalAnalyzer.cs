@@ -109,7 +109,6 @@ namespace Calculator.Core
                         + argumentCount.ToString()
                         + OperatorConsts.ClosingParenthesis.ToString();
                     _position = closingParenthesisIndex + 1; 
-                    Console.WriteLine(functionName);
 
                     return functionName;
                 }
