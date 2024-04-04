@@ -64,5 +64,15 @@
     </ProjectReference>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Calculator.Core\Calculator.Core.csproj">
+      <Project>{17DC1BD3-5AA6-4C45-9248-BA8CCAE63AEE}</Project>
+      <Name>Calculator.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Calculator.Infrastructure\Calculator.Infrastructure.csproj">
+      <Project>{D7E60B58-7A52-46EA-957D-E263ABA6DD2E}</Project>
+      <Name>Calculator.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
