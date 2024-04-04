@@ -1,5 +1,6 @@
 ﻿using Calculator.Core.Consts;
 using Calculator.Infrastructure.Data;
+using System;
 using System.Collections.Generic;
 
 namespace Calculator.Core
@@ -91,12 +92,31 @@ namespace Calculator.Core
         {
             var startPosition = _position;
 
-            while (_position < _expression.Length && char.IsLetterOrDigit(_expression[_position]))
+            if (_expression[startPosition] == OperatorConsts.Func)
             {
-                _position++;
+                int openingParenthesisIndex = _expression.IndexOf(OperatorConsts.OpeningParenthesis, startPosition);
+                int closingParenthesisIndex = _expression.IndexOf(OperatorConsts.ClosingParenthesis, startPosition);
+
+                if (openingParenthesisIndex != -1 && closingParenthesisIndex != -1 
+                    && closingParenthesisIndex > openingParenthesisIndex + 1)
+                {
+                    string arguments = _expression.Substring(openingParenthesisIndex + 1, 
+                        closingParenthesisIndex - openingParenthesisIndex - 1);
+                    string[] argumentTokens = arguments.Split(OperatorConsts.Comma);
+                    int argumentCount = argumentTokens.Length;
+                    string functionName = OperatorConsts.Func.ToString()
+                        + OperatorConsts.OpeningParenthesis.ToString()
+                        + argumentCount.ToString()
+                        + OperatorConsts.ClosingParenthesis.ToString();
+                    _position = closingParenthesisIndex + 1; 
+
+                    return functionName;
+                }
             }
 
-            return _expression.Substring(startPosition, _position - startPosition);
+            string id = _expression.Substring(startPosition, 1);
+
+            return id;
         }
 
         private bool IsFunction(string id)

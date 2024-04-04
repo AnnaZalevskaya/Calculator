@@ -3,6 +3,7 @@ using Calculator.Core.Nodes;
 using Calculator.Core.Consts;
 using Calculator.Infrastructure.Data;
 using Calculator.Application.Extensions;
+using static Calculator.Core.Models.Function;
 
 namespace Calculator.Core.Extensions
 {
@@ -84,16 +85,27 @@ namespace Calculator.Core.Extensions
             }
             else if (expression is FunctionNode functionNode)
             {
-                var function = _context.GetFunction(functionNode.Name);
-                var argumentValue1 = EvaluateExpression(functionNode.Argument1);
-                var argumentValue2 = EvaluateExpression(functionNode.Argument2);
-
-                return function(argumentValue1, argumentValue2);
+                return EvaluateFunc(_context, functionNode);
             }
             else
             {
                 throw new Exception("Invalid expression");
             }
+        }
+
+        public double EvaluateFunc(ExpressionContext context, FunctionNode functionNode)
+        {
+            double[] argumentValues = new double[functionNode.Arguments.Length];
+
+            for (int i = 0; i < functionNode.Arguments.Length; i++)
+            {
+                argumentValues[i] = EvaluateFunc(context, functionNode);
+            }
+
+            GenericFunction<double, double> function = context.GetFunction(functionNode.Name);
+            double result = function(argumentValues);
+
+            return result;
         }
 
         private ExpressionNode ParseExpression(string expression)

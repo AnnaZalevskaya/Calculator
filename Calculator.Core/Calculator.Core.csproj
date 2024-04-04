@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Consts\OperatorConsts.cs" />
+    <Compile Include="Models\Function.cs" />
     <Compile Include="Nodes\BinaryOperatorNode.cs" />
     <Compile Include="Nodes\Base\ExpressionNode.cs" />
     <Compile Include="Nodes\FunctionNode.cs" />
