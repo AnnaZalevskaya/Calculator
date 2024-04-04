@@ -7,6 +7,7 @@
         Operator,
         Function,
         LeftParenthesis,
-        RightParenthesis
+        RightParenthesis,
+        Comma
     }
 }

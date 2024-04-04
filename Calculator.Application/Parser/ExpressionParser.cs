@@ -85,10 +85,14 @@ namespace Calculator.Core.Extensions
             else if (expression is FunctionNode functionNode)
             {
                 var function = _context.GetFunction(functionNode.Name);
-                var argumentValue1 = EvaluateExpression(functionNode.Argument1);
-                var argumentValue2 = EvaluateExpression(functionNode.Argument2);
+                var argumentValues = new double[functionNode.Arguments.Length];
 
-                return function(argumentValue1, argumentValue2);
+                for (int i = 0; i < functionNode.Arguments.Length; i++)
+                {
+                    argumentValues[i] = EvaluateExpression(functionNode.Arguments[i]);
+                }
+
+                return function(argumentValues);
             }
             else
             {

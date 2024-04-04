@@ -1,6 +1,9 @@
-﻿using Calculator.Core.Extensions;
+﻿using Calculator.Core.Consts;
+using Calculator.Core.Extensions;
 using Calculator.Infrastructure.Data;
 using System;
+using System.Linq;
+using static Calculator.Core.Models.Function;
 
 namespace Calculator.Application.Extensions
 {
@@ -27,7 +30,7 @@ namespace Calculator.Application.Extensions
 
         private void ParseExpression(string expression)
         {
-            string[] parts = expression.Split('=');
+            string[] parts = expression.Split(OperatorConsts.EqualsSign);
 
             if (parts.Length != 2)
             {
@@ -37,27 +40,29 @@ namespace Calculator.Application.Extensions
             string functionSignature = parts[0].Trim();
             string functionBody = parts[1].Trim();
 
-            string[] functionParts = functionSignature.Split('(');
-
-            if (functionParts.Length != 2)
+            if (!functionSignature.StartsWith(OperatorConsts.Func.ToString()))
             {
-                throw new Exception("Invalid function signature.");
+                throw new Exception("Invalid function signature. Function name must start with 'f'.");
             }
 
-            string functionName = functionParts[0].Trim();
-            string parametersStr = functionParts[1].TrimEnd(')');
+            string parametersStr = functionSignature
+                .Substring(functionSignature.IndexOf(OperatorConsts.OpeningParenthesis) + 1);
+            parametersStr = parametersStr.TrimEnd(OperatorConsts.ClosingParenthesis);
 
-            string[] parameterNames = parametersStr.Split(',');
+            string[] parameterNames = parametersStr.Split(OperatorConsts.Comma);
 
-            foreach (var parameterName in parameterNames)
+            int argumentCount = parameterNames.Length;
+            string functionName = OperatorConsts.Func.ToString() 
+                + OperatorConsts.OpeningParenthesis.ToString() 
+                + argumentCount.ToString() 
+                + OperatorConsts.ClosingParenthesis.ToString(); 
+
+            GenericFunction<double, double> function = args =>
             {
-                _context.AddVariable(parameterName.Trim(), 0);
-            }
-
-            Func<double, double, double> function = (x, y) =>
-            {
-                _context.AddVariable(parameterNames[0].Trim(), x);
-                _context.AddVariable(parameterNames[1].Trim(), y);
+                for (int i = 0; i < args.Length; i++)
+                {
+                    _context.AddVariable(parameterNames[i].Trim(), args[i]);
+                }
 
                 ExpressionParser parser = new ExpressionParser(_context);
                 double result = parser.ParseAndEvaluate(functionBody);

@@ -89,10 +89,10 @@ namespace Calculator.Core.Extensions
                 case TokenType.Variable:
                     return new VariableNode(token.Value.ToString());
                 case TokenType.Function:
-                    var argument1 = ParseFactor();
-                    var argument2 = ParseFactor();
+                    var functionName = token.Value.ToString();
+                    var arguments = ParseFunctionArguments();
 
-                    return new FunctionNode(token.Value.ToString(), argument1, argument2);
+                    return new FunctionNode(functionName, arguments);
                 case TokenType.LeftParenthesis:
                     var expression = ParseExpression();
 
@@ -113,6 +113,28 @@ namespace Calculator.Core.Extensions
             }
 
             return null;
+        }
+
+        private ExpressionNode[] ParseFunctionArguments()
+        {
+            var arguments = new List<ExpressionNode>();
+
+            while (_position < _tokens.Count)
+            {
+                var argument = ParseExpression();
+                arguments.Add(argument);
+
+                if (_position < _tokens.Count && _tokens[_position].Type == TokenType.Comma)
+                {
+                    _position++; 
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return arguments.ToArray();
         }
     }
 }
