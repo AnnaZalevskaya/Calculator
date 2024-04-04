@@ -108,6 +108,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Validation\UserValidator.cs" />
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
