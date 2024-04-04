@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -25,6 +25,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Calculator.Application\Calculator.Application.csproj" />
+    <ProjectReference Include="..\Calculator.Core\Calculator.Core.csproj" />
+    <ProjectReference Include="..\Calculator.Infrastructure\Calculator.Infrastructure.csproj" />
+    <ProjectReference Include="..\Calculator.Wpf\Calculator.Wpf.csproj" />
   </ItemGroup>
 
 </Project>
