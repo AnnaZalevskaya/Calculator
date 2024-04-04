@@ -7,6 +7,7 @@ namespace Calculator.Application.Services.Implementations
     public class VariableService : IVariableService
     {
         private readonly Dictionary<string, double> _variables = new Dictionary<string, double>();
+
         public void Setvariable(string name, double value)
         {
             if (_variables.ContainsKey(name))

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Calculator.Application.Services.Interfaces;
+﻿using Calculator.Application.Services.Interfaces;
 
 namespace Calculator.Application.Services.Implementations
 {
