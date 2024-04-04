@@ -39,7 +39,10 @@ namespace Calculator.Core
                     }
                     else
                     {
-                        tokens.Add(new Token(TokenType.Variable, id));
+                        if (IsVariable(id))
+                        {
+                            tokens.Add(new Token(TokenType.Variable, id));
+                        }
                     }
                 }
                 else if (IsOperator(currentChar))
@@ -79,6 +82,11 @@ namespace Calculator.Core
             return _expression.Substring(startPosition, _position - startPosition);
         }
 
+        private bool IsVariable(string id)
+        {
+            return _context.ContainsVariable(id);
+        }
+
         private string ReadId()
         {
             var startPosition = _position;
@@ -93,16 +101,7 @@ namespace Calculator.Core
 
         private bool IsFunction(string id)
         {
-            var function = _context.GetFunction(id);
-
-            if (function != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return _context.ContainsFunction(id);
         }
 
         private bool IsOperator(char c)

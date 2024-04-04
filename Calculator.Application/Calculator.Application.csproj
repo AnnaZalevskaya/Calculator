@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NCalc, Version=1.3.8.0, Culture=neutral, PublicKeyToken=973cde3f1cafed03, processorArchitecture=MSIL">
-      <HintPath>..\packages\ncalc.1.3.8\lib\NCalc.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,17 +41,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Implementations\ExpressionEvaluator.cs" />
-    <Compile Include="Services\Implementations\VariableService.cs" />
-    <Compile Include="Services\Implementations\ExpressionParsingService.cs" />
-    <Compile Include="Services\Interfaces\IExpressionParsingService.cs" />
-    <Compile Include="Services\Interfaces\IVariableService.cs" />
+    <Compile Include="Extensions\ExpressionParserExtension.cs" />
+    <Compile Include="Extensions\FunctionParserExtension.cs" />
+    <Compile Include="Extensions\VariableParserExtension.cs" />
     <Compile Include="Parser\ExpressionLexicalAnalyzer.cs" />
     <Compile Include="Parser\ExpressionParser.cs" />
-    <Compile Include="Extensions\ExpressionParserExtension.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Evaluator\ExpressionEvaluator.cs" />
+    <Compile Include="Services\Implementations\VariableService.cs" />
+    <Compile Include="Services\Interfaces\IVariableService.cs" />
+    <Compile Include="Services\Implementations\ExpressionParsingService.cs" />
+    <Compile Include="Services\Interfaces\IExpressionParsingService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Calculator.Core\Calculator.Core.csproj">
+      <Project>{17DC1BD3-5AA6-4C45-9248-BA8CCAE63AEE}</Project>
+      <Name>Calculator.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Calculator.Infrastructure\Calculator.Infrastructure.csproj">
+      <Project>{d7e60b58-7a52-46ea-957d-e263aba6dd2e}</Project>
+      <Name>Calculator.Infrastructure</Name>
+    </ProjectReference>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

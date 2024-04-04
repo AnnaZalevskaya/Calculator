@@ -2,7 +2,8 @@
 {
     public interface IVariableService
     {
-        void Setvariable(string name, double value);
-        double GetvariableValue(string name);
+        void SetVariable(string expression);
+        double GetVariableValue(string name);
+        void SetFunction(string expression);
     }
 }

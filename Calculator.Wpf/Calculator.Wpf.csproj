@@ -109,12 +109,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Validation\UserValidator.cs" />
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Calculator.Application\Calculator.Application.csproj">
       <Project>{8AD04BA1-CCAC-4EA9-9315-D5017E7779C4}</Project>
       <Name>Calculator.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Calculator.Infrastructure\Calculator.Infrastructure.csproj">
+      <Project>{D7E60B58-7A52-46EA-957D-E263ABA6DD2E}</Project>
+      <Name>Calculator.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

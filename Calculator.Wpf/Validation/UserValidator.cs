@@ -141,7 +141,7 @@ namespace Calculator.Wpf.Validation
                 if ((_statementOperators.Contains(currentChar))
                        && (nextChar == ')'))
                 {
-                    return $"Closing parenthesis ')' preceded by the operator '{nextChar}";
+                    return $"Closing parenthesis ')' preceded by the operator '{currentChar}";
                 }
 
                 return null;

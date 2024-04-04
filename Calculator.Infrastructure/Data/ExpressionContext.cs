@@ -5,23 +5,23 @@ namespace Calculator.Infrastructure.Data
 {
     public class ExpressionContext
     {
-        private readonly Dictionary<string, double> variables;
-        private readonly Dictionary<string, Func<double, double, double>> functions;
+        private readonly Dictionary<string, double> _variables;
+        private readonly Dictionary<string, Func<double, double, double>> _functions;
 
         public ExpressionContext()
         {
-            variables = new Dictionary<string, double>();
-            functions = new Dictionary<string, Func<double, double, double>>();
+            _variables = new Dictionary<string, double>();
+            _functions = new Dictionary<string, Func<double, double, double>>();
         }
 
         public void AddVariable(string name, double value)
         {
-            variables[name] = value;
+            _variables[name] = value;
         }
 
         public double GetVariable(string name)
         {
-            if (variables.TryGetValue(name, out double value))
+            if (_variables.TryGetValue(name, out double value))
             {  
                 return value; 
             }
@@ -29,19 +29,24 @@ namespace Calculator.Infrastructure.Data
             throw new Exception($"Variable '{name}' not found.");
         }
 
+        public bool ContainsVariable(string name)
+        {
+            return _variables.ContainsKey(name); 
+        }
+
         public void RemoveVariable(string name)
         {
-            variables.Remove(name);
+            _variables.Remove(name);
         }
 
         public void AddFunction(string name, Func<double, double, double> function)
         {
-            functions[name] = function;
+            _functions[name] = function;
         }
 
         public Func<double, double, double> GetFunction(string name)
         {
-            if (functions.TryGetValue(name, out Func<double, double, double> function))
+            if (_functions.TryGetValue(name, out Func<double, double, double> function))
             {
                 return function;
             }
@@ -49,9 +54,14 @@ namespace Calculator.Infrastructure.Data
             throw new Exception($"Function '{name}' not found.");
         }
 
+        public bool ContainsFunction(string name)
+        {
+            return _functions.ContainsKey(name);
+        }
+
         public void RemoveFunction(string name)
         {
-            functions.Remove(name);
+            _functions.Remove(name);
         }
     }
 }
