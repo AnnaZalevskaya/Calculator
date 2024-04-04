@@ -83,11 +83,13 @@ namespace Calculator.Wpf
                     if(checkedRadioButton.Content.ToString() == _radioButtonValues[0])
                     {
                         _expressionEvaluator.SaveVariable(_ExpressionTextBlock.Text);
+                        MessageBox.Show("Variable " + _ExpressionTextBlock.Text + " has been added!");
                         ClearExpression();
                     }
                     if (checkedRadioButton.Content.ToString() == _radioButtonValues[1])
                     {
                         _expressionEvaluator.SaveFunction(_ExpressionTextBlock.Text);
+                        MessageBox.Show("Func " + _ExpressionTextBlock.Text + " has been added!");
                         ClearExpression();
                     }
                     break;
