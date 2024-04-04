@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 using System;
+using static Calculator.Core.Models.Function;
 
 namespace Calculator.Infrastructure.Data
 {
     public class ExpressionContext
     {
         private readonly Dictionary<string, double> _variables;
-        private readonly Dictionary<string, Func<double, double, double>> _functions;
+        private readonly Dictionary<string, GenericFunction<double, double>> _functions;
 
         public ExpressionContext()
         {
             _variables = new Dictionary<string, double>();
-            _functions = new Dictionary<string, Func<double, double, double>>();
+            _functions = new Dictionary<string, GenericFunction<double, double>>();
         }
 
         public void AddVariable(string name, double value)
@@ -39,14 +40,14 @@ namespace Calculator.Infrastructure.Data
             _variables.Remove(name);
         }
 
-        public void AddFunction(string name, Func<double, double, double> function)
+        public void AddFunction(string name, GenericFunction<double, double> function)
         {
             _functions[name] = function;
         }
 
-        public Func<double, double, double> GetFunction(string name)
+        public GenericFunction<double, double> GetFunction(string name)
         {
-            if (_functions.TryGetValue(name, out Func<double, double, double> function))
+            if (_functions.TryGetValue(name, out GenericFunction<double, double> function))
             {
                 return function;
             }

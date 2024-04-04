@@ -9,5 +9,8 @@
         public const char Point = '.';
         public const char OpeningParenthesis = '(';
         public const char ClosingParenthesis = ')';
+        public const char Comma = ',';
+        public const char EqualsSign = '=';
+        public const char Func = 'f';
     }
 }
