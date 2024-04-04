@@ -1,16 +1,14 @@
-﻿using System;
+﻿using Calculator.Application.Evaluator;
+using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
 namespace Calculator.Wpf
 {
-
     public partial class MainWindow : Window
     {
         private Grid _numberPanel;
@@ -22,7 +20,7 @@ namespace Calculator.Wpf
         private readonly string[] _additionalButtonValues = new[] { "<-", "=", "(", ")", "Res" };
         private readonly string[] _variablesName = new[] { "x", "y", "z", "i", "j", "k", "f",",","Save" };
         private readonly string[] _radioButtonValues = new[] { "Variables", "Functions" };
-
+        private ExpressionEvaluator _expressionEvaluator;
 
         public MainWindow()
         {
@@ -51,12 +49,17 @@ namespace Calculator.Wpf
             Calculator.Children.Add(_additionalPanel);
             Calculator.Children.Add(_radioButtonsGrid);
             Calculator.Children.Add(_ExpressionTextBlock);
+        }
 
+        public void Initialize(ExpressionEvaluator expressionEvaluator)
+        {
+            _expressionEvaluator = expressionEvaluator;
         }
 
         private void InputButton_Click(object sender, RoutedEventArgs e)
         {
             Button pressedButton = (Button)sender;
+
             switch (pressedButton.Content)
             {
                 case "C":
@@ -65,21 +68,27 @@ namespace Calculator.Wpf
                 case "<-":
                     if (_ExpressionTextBlock.Text != String.Empty)
                     {
-                        _ExpressionTextBlock.Text = _ExpressionTextBlock.Text.Remove(_ExpressionTextBlock.Text.Count() - 1); ;
+                        _ExpressionTextBlock.Text = _ExpressionTextBlock.Text
+                            .Remove(_ExpressionTextBlock.Text.Count() - 1); ;
                     }
                     break;
                 case "Res":
-                    //implement sending expression
+                    double res = _expressionEvaluator.EvaluateExpression(_ExpressionTextBlock.Text);
+                    _ExpressionTextBlock.Text = res.ToString();
                     break;
                 case "Save":
-                    var checkedRadioButton = _radioButtonsGrid.Children.OfType<RadioButton>().FirstOrDefault(n => n.IsChecked==true);
-                    if(checkedRadioButton.Content.ToString() == _radioButtonValues[0])//variable
+                    var checkedRadioButton = _radioButtonsGrid.Children
+                        .OfType<RadioButton>()
+                        .FirstOrDefault(n => n.IsChecked==true);
+                    if(checkedRadioButton.Content.ToString() == _radioButtonValues[0])
                     {
-                        //Implement saving variable
+                        _expressionEvaluator.SaveVariable(_ExpressionTextBlock.Text);
+                        ClearExpression();
                     }
-                    if (checkedRadioButton.Content.ToString() == _radioButtonValues[1])//func
+                    if (checkedRadioButton.Content.ToString() == _radioButtonValues[1])
                     {
-                        //Implement saving func
+                        _expressionEvaluator.SaveFunction(_ExpressionTextBlock.Text);
+                        ClearExpression();
                     }
                     break;
                 default:
@@ -105,6 +114,7 @@ namespace Calculator.Wpf
         {
             _ExpressionTextBlock.Text = String.Empty;
         }
+
         private void AddRadioButtons(Grid panel, string[] radioButtonValues)
         {
             for (int i = 0; i < radioButtonValues.Length; i++)
@@ -117,6 +127,7 @@ namespace Calculator.Wpf
             }
 
         }
+
         private void AddButtons<T>(Grid panel, IList<T> operations)
         {
             int index = 0;
@@ -154,8 +165,10 @@ namespace Calculator.Wpf
                 gridPanel.ColumnDefinitions.Add(new ColumnDefinition());
 
             }
+
             return gridPanel;
         }
+
         private TextBlock InitializeExpressionTextBlock()
         {
             return new TextBlock

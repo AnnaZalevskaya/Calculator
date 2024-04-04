@@ -2,16 +2,21 @@
 using Calculator.Core.Nodes;
 using Calculator.Core.Consts;
 using Calculator.Infrastructure.Data;
+using Calculator.Application.Extensions;
 
 namespace Calculator.Core.Extensions
 {
     public class ExpressionParser
     {
         private readonly ExpressionContext _context;
+        private readonly VariableParserExtension _variableParser;
+        private readonly FunctionParserExtension _functionParser;
 
         public ExpressionParser(ExpressionContext context)
         {
             _context = context;
+            _variableParser = new VariableParserExtension(_context);
+            _functionParser = new FunctionParserExtension(_context);
         }
 
         public double ParseAndEvaluate(string expression)
@@ -29,6 +34,16 @@ namespace Calculator.Core.Extensions
             }
 
             return result;
+        }
+
+        public void ParseAndSaveVariable(string expression)
+        {
+            _variableParser.ParseAndEvaluate(expression);
+        }
+
+        public void ParseAndSaveFunction(string expression)
+        {
+            _functionParser.ParseAndEvaluate(expression);
         }
 
         private double EvaluateExpression(ExpressionNode expression)

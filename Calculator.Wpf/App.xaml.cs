@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Windows;
+using Calculator.Application.Evaluator;
 using Calculator.Application.Services.Implementations;
 using Calculator.Application.Services.Interfaces;
+using Calculator.Core.Extensions;
+using Calculator.Infrastructure.Data;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Calculator.Wpf
@@ -17,10 +20,18 @@ namespace Calculator.Wpf
         {
             IServiceCollection services = new ServiceCollection();
 
-            services.AddScoped<IVariableService, VariableService>();
+            services.AddSingleton<ExpressionContext>();
+            services.AddSingleton<ExpressionParser>();
+            services.AddSingleton<ExpressionEvaluator>();
             
+            services.AddScoped<IVariableService, VariableService>();
+            services.AddScoped<IExpressionParsingService, ExpressionParsingService>();
 
             _serviceProvider = services.BuildServiceProvider();
+
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Initialize(_serviceProvider.GetRequiredService<ExpressionEvaluator>());
+            mainWindow.Show();
         }
 
         protected override void OnStartup(StartupEventArgs e)
