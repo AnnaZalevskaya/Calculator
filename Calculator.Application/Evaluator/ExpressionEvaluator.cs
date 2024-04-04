@@ -1,25 +1,31 @@
 ﻿using Calculator.Application.Services.Interfaces;
 
-namespace Calculator.Application.Services.Implementations
+namespace Calculator.Application.Evaluator
 {
     public class ExpressionEvaluator
     {
         private readonly IVariableService _variableService;
-        public ExpressionEvaluator(IVariableService variableService)
+        private readonly IExpressionParsingService _expressionParsingService;
+
+        public ExpressionEvaluator(IVariableService variableService, IExpressionParsingService expressionParsingService)
         {
             _variableService = variableService;
+            _expressionParsingService = expressionParsingService;
         }
 
         public double EvaluateExpression(string expression)
         {
-            var parser = new NCalc.Expression(expression);
-           // parser.EvaluateParameter += EvaluateParameter;
-            return (double)parser.Evaluate();
+            return _expressionParsingService.EvaluateExpression(expression);
         }
 
-        private double EvaluateParameter(string name)
+        public void SaveVariable(string expression)
         {
-            return _variableService.GetvariableValue(name);
+            _variableService.SetVariable(expression);
+        }
+
+        public void SaveFunction(string expession)
+        {
+            _variableService.SetFunction(expession);
         }
     }
 }

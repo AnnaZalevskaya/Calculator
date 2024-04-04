@@ -1,30 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
 using Calculator.Application.Services.Interfaces;
+using Calculator.Infrastructure.Data;
 
 namespace Calculator.Application.Services.Implementations
 {
     public class VariableService : IVariableService
     {
-        private readonly Dictionary<string, double> _variables = new Dictionary<string, double>();
+        private readonly ExpressionContext _context;
+        private readonly IExpressionParsingService _expressionParsingService;
 
-        public void Setvariable(string name, double value)
+        public VariableService(ExpressionContext context, IExpressionParsingService expressionParsingService)
         {
-            if (_variables.ContainsKey(name))
-            {
-                _variables[name] = value;
-            }
-            else
-            {
-                _variables.Add(name, value);
-            }
+            _context = context;
+            _expressionParsingService = expressionParsingService;
         }
 
-        public double GetvariableValue(string name)
+        public void SetVariable(string expression)
         {
-            if (_variables.ContainsKey(name))
+            _expressionParsingService.SaveVariable(expression);
+        }
+
+        public void SetFunction(string expression)
+        {
+            _expressionParsingService.SaveFunction(expression);
+        }
+
+        public double GetVariableValue(string name)
+        {
+            if (_context.ContainsVariable(name))
             {
-                return _variables[name];
+                return _context.GetVariable(name);
             }
             else
             {
