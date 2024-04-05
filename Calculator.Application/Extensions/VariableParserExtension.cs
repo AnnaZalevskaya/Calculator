@@ -1,4 +1,5 @@
-﻿using Calculator.Infrastructure.Data;
+﻿using Calculator.Core.Consts;
+using Calculator.Infrastructure.Data;
 using System;
 
 namespace Calculator.Application.Extensions
@@ -26,7 +27,7 @@ namespace Calculator.Application.Extensions
 
         private void ParseExpression(string expression)
         {
-            string[] parts = expression.Split('=');
+            string[] parts = expression.Split(OperatorConsts.EqualsSign);
 
             if (parts.Length != 2)
             {

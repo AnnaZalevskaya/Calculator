@@ -74,7 +74,7 @@ namespace Calculator.Wpf
                     break;
                 case "Res":
                     double res = _expressionEvaluator.EvaluateExpression(_ExpressionTextBlock.Text);
-                    _ExpressionTextBlock.Text = res.ToString();
+                    _ExpressionTextBlock.Text = res.ToString().Replace(',', '.');
                     break;
                 case "Save":
                     var checkedRadioButton = _radioButtonsGrid.Children

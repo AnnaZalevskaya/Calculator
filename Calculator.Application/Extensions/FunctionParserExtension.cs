@@ -2,7 +2,6 @@
 using Calculator.Core.Extensions;
 using Calculator.Infrastructure.Data;
 using System;
-using System.Linq;
 using static Calculator.Core.Models.Function;
 
 namespace Calculator.Application.Extensions
