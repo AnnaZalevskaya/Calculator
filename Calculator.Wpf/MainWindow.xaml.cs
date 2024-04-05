@@ -136,6 +136,8 @@ namespace Calculator.Wpf
             {
                 RadioButton radioButton = new RadioButton();
                 radioButton.Content = radioButtonValues[i];
+                radioButton.FontSize = 18;
+
                 radioButton.Resources.Add(typeof(RadioButton), (Style)FindResource(typeof(ToggleButton)));
                 SetGridPosition(radioButton, i, 0);
                 panel.Children.Add(radioButton);
@@ -157,8 +159,11 @@ namespace Calculator.Wpf
                     numberBtn.Click += InputButton_Click;
                     numberBtn.Content = operations[index].ToString();
                     numberBtn.Margin = new Thickness(1, 2, 1, 2);
+                    numberBtn.FontFamily = new FontFamily("Mangal");
+                    numberBtn.FontSize = 20;
                     Grid.SetRow(numberBtn, row);
                     Grid.SetColumn(numberBtn, colomn);
+                    StyleButton(numberBtn);
                     panel.Children.Add(numberBtn);
                     index++;
                 }
@@ -188,11 +193,41 @@ namespace Calculator.Wpf
         {
             return new TextBlock
             {
-                FontSize = 24,
+                FontSize = 34,
                 TextAlignment = TextAlignment.Right,
-                Background = Brushes.LightGray
+                VerticalAlignment = VerticalAlignment.Center,
             };
-        } 
+        }
+        private void StyleButton(Button btn)
+        {
+            int num;
+            if (int.TryParse(btn.Content.ToString(), out num) || btn.Content.ToString() == ".")
+            {
+                btn.Background = Brushes.WhiteSmoke;
+            }
+            else if (char.IsLetter(btn.Content.ToString(), 0) || btn.Content.ToString() == ",")
+            {
+                btn.Background = Brushes.WhiteSmoke;
+
+            }
+            switch (btn.Content)
+            {
+                case "C":
+                    btn.Foreground = Brushes.Red;
+                    btn.Background = Brushes.LightGray;
+                    btn.FontWeight = FontWeight.FromOpenTypeWeight(600);
+                    break;
+                case "Res":
+                    btn.Background = Brushes.LightSkyBlue;
+                    break;
+                case "Save":
+                    btn.Background = Brushes.LightGray;
+
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
 }
