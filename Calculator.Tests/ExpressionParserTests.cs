@@ -20,12 +20,12 @@ namespace Calculator.Tests
 		}
 
 		[Theory]
-		[InlineData("1 +- 2 -- 3")]
+		[InlineData("1 +/ 2 -*- 3")]
 		[InlineData("1 + z")] 
-		public void ParseAndEvaluate_ReturnsNaNWhenDifferentTypesOfExpressionIsPassed(string expression)
+		public void ParseAndEvaluate_ReturnsPositiveInfinityWhenDifferentTypesOfExpressionIsPassed(string expression)
 		{
 			var actual = parser.ParseAndEvaluate(expression);
-			Assert.Equal(double.NaN, actual);
+			Assert.Equal(double.PositiveInfinity, actual);
 		}
 
 		private static ExpressionParser CreateExpressionParser()
@@ -34,7 +34,7 @@ namespace Calculator.Tests
 
 			context.AddVariable("x", 1d);
 			context.AddVariable("y", 2d);
-			context.AddFunction("f", (x, y) => x + y);
+			context.AddFunction("f", (args) => args[0] + args[1]);
 
 			return new ExpressionParser(context);
 		}
