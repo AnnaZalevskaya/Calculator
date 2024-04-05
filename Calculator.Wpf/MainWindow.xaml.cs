@@ -82,13 +82,12 @@ namespace Calculator.Wpf
                     if (validationResult == "Expression is valid")
                     {
                         double res = _expressionEvaluator.EvaluateExpression(_ExpressionTextBlock.Text);
-                        _ExpressionTextBlock.Text = res.ToString();
+                        _ExpressionTextBlock.Text = res.ToString().Replace(',', '.');
                     }
                     else
                     {
                         MessageBox.Show(validationResult, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-                    
                     break;
                 case "Save":
                     var checkedRadioButton = _radioButtonsGrid.Children

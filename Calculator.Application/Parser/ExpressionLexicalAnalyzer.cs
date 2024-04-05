@@ -45,6 +45,7 @@ namespace Calculator.Core
                             tokens.Add(new Token(TokenType.Variable, id));
                         }
                     }
+                    _position++;
                 }
                 else if (IsOperator(currentChar))
                 {
@@ -73,10 +74,19 @@ namespace Calculator.Core
         private string ReadNumber()
         {
             var startPosition = _position;
+            var hasDecimalPoint = false;
 
             while (_position < _expression.Length && (char.IsDigit(_expression[_position]) 
-                || _expression[_position] == OperatorConsts.Point))
+                || (!hasDecimalPoint && _expression[_position] == OperatorConsts.Point)))
             {
+                if (_expression[_position] == OperatorConsts.Point)
+                {
+                    if (hasDecimalPoint)
+                    {
+                        throw new ArgumentException("Invalid number format.");
+                    }
+                    hasDecimalPoint = true;
+                }
                 _position++;
             }
 
@@ -115,6 +125,7 @@ namespace Calculator.Core
             }
 
             string id = _expression.Substring(startPosition, 1);
+            _position++;
 
             return id;
         }

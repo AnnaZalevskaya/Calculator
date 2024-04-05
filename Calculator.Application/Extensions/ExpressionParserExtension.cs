@@ -72,13 +72,12 @@ namespace Calculator.Core.Extensions
 
         private ExpressionNode ParseFactor()
         {
-            var token = _tokens[_position];
-            _position++;
+            var token = _tokens[_position++];
 
             switch(token.Type)
             {
                 case TokenType.Number:
-                    if (double.TryParse(token.Value.ToString(), out double value))
+                    if (double.TryParse(token.Value.ToString().Replace('.', ','), out double value))
                     {
                         return new NumberNode(value);
                     }
@@ -90,9 +89,9 @@ namespace Calculator.Core.Extensions
                     return new VariableNode(token.Value.ToString());
                 case TokenType.Function:
                     var functionName = token.Value.ToString();
-                    var arguments = ParseFunctionArguments();
+                    var argument = ParseFactor(); 
 
-                    return new FunctionNode(functionName, arguments);
+                    return new FunctionNode(functionName, new ExpressionNode[] { argument });
                 case TokenType.LeftParenthesis:
                     var expression = ParseExpression();
 
@@ -113,28 +112,6 @@ namespace Calculator.Core.Extensions
             }
 
             return null;
-        }
-
-        private ExpressionNode[] ParseFunctionArguments()
-        {
-            var arguments = new List<ExpressionNode>();
-
-            while (_position < _tokens.Count)
-            {
-                var argument = ParseExpression();
-                arguments.Add(argument);
-
-                if (_position < _tokens.Count && _tokens[_position].Type == TokenType.Comma)
-                {
-                    _position++; 
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return arguments.ToArray();
         }
     }
 }

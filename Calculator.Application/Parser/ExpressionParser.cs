@@ -31,7 +31,7 @@ namespace Calculator.Core.Extensions
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message);
-                result = double.NaN;
+                result = double.PositiveInfinity;
             }
 
             return result;
@@ -95,17 +95,25 @@ namespace Calculator.Core.Extensions
 
         public double EvaluateFunc(ExpressionContext context, FunctionNode functionNode)
         {
-            double[] argumentValues = new double[functionNode.Arguments.Length];
+            string functionName = functionNode.Name;
+            ExpressionNode[] arguments = functionNode.Arguments;
 
-            for (int i = 0; i < functionNode.Arguments.Length; i++)
+            if (context.ContainsFunction(functionName))
             {
-                argumentValues[i] = EvaluateFunc(context, functionNode);
+                GenericFunction<double, double> function = context.GetFunction(functionName);
+                double[] argumentValues = new double[arguments.Length];
+
+                for (int i = 0; i < arguments.Length; i++)
+                {
+                    argumentValues[i] = EvaluateExpression(arguments[i]);
+                }
+
+                return function.Invoke(argumentValues);
             }
-
-            GenericFunction<double, double> function = context.GetFunction(functionNode.Name);
-            double result = function(argumentValues);
-
-            return result;
+            else
+            {
+                throw new Exception($"Function '{functionName}' not found.");
+            }
         }
 
         private ExpressionNode ParseExpression(string expression)
