@@ -1,4 +1,5 @@
 ﻿using Calculator.Application.Evaluator;
+using Calculator.Wpf.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,8 @@ namespace Calculator.Wpf
         private readonly string[] _variablesName = new[] { "x", "y", "z", "i", "j", "k", "f",",","Save" };
         private readonly string[] _radioButtonValues = new[] { "Variables", "Functions" };
         private ExpressionEvaluator _expressionEvaluator;
+
+        private UserValidator _validator;
 
         public MainWindow()
         {
@@ -49,6 +52,8 @@ namespace Calculator.Wpf
             Calculator.Children.Add(_additionalPanel);
             Calculator.Children.Add(_radioButtonsGrid);
             Calculator.Children.Add(_ExpressionTextBlock);
+
+            _validator = new UserValidator();
         }
 
         public void Initialize(ExpressionEvaluator expressionEvaluator)
@@ -73,8 +78,17 @@ namespace Calculator.Wpf
                     }
                     break;
                 case "Res":
-                    double res = _expressionEvaluator.EvaluateExpression(_ExpressionTextBlock.Text);
-                    _ExpressionTextBlock.Text = res.ToString();
+                    string validationResult = _validator.Validate(_ExpressionTextBlock.Text);
+                    if (validationResult == "Expression is valid")
+                    {
+                        double res = _expressionEvaluator.EvaluateExpression(_ExpressionTextBlock.Text);
+                        _ExpressionTextBlock.Text = res.ToString();
+                    }
+                    else
+                    {
+                        MessageBox.Show(validationResult, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    
                     break;
                 case "Save":
                     var checkedRadioButton = _radioButtonsGrid.Children
